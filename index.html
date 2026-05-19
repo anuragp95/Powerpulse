@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PowerPulse — Energy & Renewables Intel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080e0d;
+      --surface: #0d1614;
+      --card: #111c19;
+      --border: #1e3330;
+      --accent: #00e87a;
+      --accent2: #ffe033;
+      --accent3: #00b4ff;
+      --text: #e8f0ee;
+      --muted: #6b8c85;
+      --danger: #ff4d4d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.5;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+      background: rgba(8,14,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: var(--text); }
+
+    .bolt { color: var(--accent2); font-size: 1.4rem; }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: var(--accent); color: #000 !important;
+      padding: 6px 16px; border-radius: 3px;
+    }
+    .nav-cta:hover { background: var(--accent2) !important; color: #000 !important; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 5vw 8vh;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,232,122,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,232,122,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 20s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(60px); }
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,232,122,0.12) 0%, transparent 70%);
+      top: -200px; right: -100px;
+      animation: pulse 6s ease-in-out infinite alternate;
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,180,255,0.08) 0%, transparent 70%);
+      bottom: 0; left: 10%;
+      animation: pulse 8s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes pulse { from { opacity: .6; } to { opacity: 1; } }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 40px; height: 1px; background: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 10rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .hero h1 .hl { color: var(--accent); }
+    .hero h1 .hl2 { color: var(--accent2); }
+
+    .hero-sub {
+      max-width: 520px;
+      font-size: 1.05rem; color: var(--muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      border: none; cursor: pointer; transition: all .25s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-stats {
+      position: absolute; right: 5vw; bottom: 8vh;
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+
+    .stat {
+      text-align: right;
+      border-right: 2px solid var(--accent);
+      padding-right: 1rem;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem; color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    /* ─── TICKER ─── */
+    .ticker-wrap {
+      background: var(--accent);
+      padding: 10px 0;
+      overflow: hidden;
+    }
+    .ticker {
+      display: flex; gap: 4rem;
+      animation: ticker 30s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.1em; color: #000;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .ticker span::before { content: '⚡ '; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 6rem 5vw; }
+
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .see-all {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
+      transition: color .2s;
+    }
+    .see-all:hover { color: var(--accent); }
+
+    /* ─── FEATURED ARTICLES ─── */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.5px;
+    }
+
+    .article-card {
+      background: var(--card);
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: background .25s;
+      border: 1px solid var(--border);
+    }
+    .article-card:hover { background: #162420; }
+
+    .article-card.featured { grid-row: span 2; }
+
+    .article-img {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover; display: block;
+      filter: grayscale(30%) brightness(0.7);
+      transition: filter .4s;
+    }
+    .article-card.featured .article-img { aspect-ratio: 4/3; }
+    .article-card:hover .article-img { filter: grayscale(0%) brightness(0.9); }
+
+    /* Placeholder gradient images */
+    .img-solar { background: linear-gradient(135deg, #ff8c00 0%, #ffd700 50%, #ff4500 100%); }
+    .img-wind  { background: linear-gradient(135deg, #00b4ff 0%, #0047ff 60%, #7b2fff 100%); }
+    .img-grid  { background: linear-gradient(135deg, #00e87a 0%, #005c30 60%, #001a0d 100%); }
+    .img-hydro { background: linear-gradient(135deg, #00cfff 0%, #0080b3 60%, #003850 100%); }
+    .img-nuke  { background: linear-gradient(135deg, #a0ff60 0%, #3db800 60%, #1a5200 100%); }
+    .img-batt  { background: linear-gradient(135deg, #ffe033 0%, #ff9500 60%, #c43c00 100%); }
+    .img-h2    { background: linear-gradient(135deg, #ff66cc 0%, #9933ff 60%, #1a0040 100%); }
+
+    .img-placeholder {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+    .article-card.featured .img-placeholder { aspect-ratio: 4/3; }
+    .img-placeholder:not(.article-card.featured *) { aspect-ratio: 16/9; }
+
+    .article-body { padding: 1.5rem; }
+    .article-card.featured .article-body { padding: 2rem; }
+
+    .article-tag {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      margin-bottom: 0.75rem;
+      background: rgba(0,232,122,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(0,232,122,0.25);
+    }
+    .article-tag.wind  { background: rgba(0,180,255,0.12); color: var(--accent3); border-color: rgba(0,180,255,0.25); }
+    .article-tag.grid  { background: rgba(255,224,51,0.12); color: var(--accent2); border-color: rgba(255,224,51,0.25); }
+    .article-tag.hydro { background: rgba(0,207,255,0.12); color: #00cfff;        border-color: rgba(0,207,255,0.25); }
+    .article-tag.nuke  { background: rgba(160,255,96,0.12); color: #a0ff60;       border-color: rgba(160,255,96,0.25); }
+    .article-tag.batt  { background: rgba(255,224,51,0.12); color: var(--accent2); border-color: rgba(255,224,51,0.25); }
+    .article-tag.h2    { background: rgba(255,102,204,0.12); color: #ff66cc;      border-color: rgba(255,102,204,0.25); }
+
+    .article-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+      transition: color .2s;
+    }
+    .article-card.featured .article-title { font-size: 1.5rem; }
+    .article-title { font-size: 1rem; }
+    .article-card:hover .article-title { color: var(--accent); }
+
+    .article-meta {
+      font-size: 0.72rem; color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      display: flex; gap: 1rem; align-items: center;
+    }
+
+    .article-excerpt {
+      font-size: 0.9rem; color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    /* ─── TECH SECTORS ─── */
+    .sectors-bg { background: var(--surface); }
+
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+    }
+
+    .sector-card {
+      background: var(--card);
+      padding: 2.5rem 2rem;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: background .25s, transform .25s;
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .sector-card:hover { background: #162420; transform: translateY(-4px); }
+
+    .sector-icon {
+      font-size: 2.5rem;
+      filter: grayscale(0);
+    }
+
+    .sector-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .sector-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+
+    .sector-bar {
+      height: 2px; background: var(--border);
+      margin-top: auto;
+    }
+    .sector-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width .6s ease;
+    }
+
+    /* ─── TRENDS TABLE ─── */
+    .trends-section { background: var(--bg); }
+
+    .trends-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .trends-table th {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .trends-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+    .trends-table tr { transition: background .2s; }
+    .trends-table tbody tr:hover { background: var(--card); }
+
+    .trend-rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; color: var(--border);
+      width: 50px;
+    }
+    .trend-name { font-weight: 600; color: var(--text); }
+    .trend-desc { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 0.65rem; letter-spacing: 0.1em;
+      font-family: 'IBM Plex Mono', monospace;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+    .badge-hot  { background: rgba(255,77,77,0.15); color: #ff4d4d; }
+    .badge-up   { background: rgba(0,232,122,0.15); color: var(--accent); }
+    .badge-new  { background: rgba(0,180,255,0.15); color: var(--accent3); }
+    .badge-watch { background: rgba(255,224,51,0.15); color: var(--accent2); }
+
+    .trend-bar-wrap {
+      width: 120px; height: 4px;
+      background: var(--border); border-radius: 2px;
+    }
+    .trend-bar-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent3));
+    }
+
+    /* ─── NEWSLETTER ─── */
+    .newsletter {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+      margin: 0 5vw 6rem;
+    }
+
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,232,122,0.07) 0%, transparent 65%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .newsletter h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .newsletter h2 .hl { color: var(--accent); }
+
+    .newsletter p {
+      color: var(--muted); max-width: 500px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+
+    .newsletter-form {
+      display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+      position: relative;
+    }
+    .newsletter-form input {
+      flex: 1;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--border);
+      border-right: none;
+      padding: 14px 20px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .newsletter-form input:focus { border-color: var(--accent); }
+    .newsletter-form input::placeholder { color: var(--muted); }
+
+    .newsletter-form button {
+      background: var(--accent); color: #000;
+      border: none; padding: 14px 24px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s;
+    }
+    .newsletter-form button:hover { background: var(--accent2); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 4rem 5vw 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .footer-brand p {
+      color: var(--muted); font-size: 0.85rem;
+      max-width: 280px; margin-top: 1rem; line-height: 1.8;
+    }
+
+    .footer-col h4 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.85rem; transition: color .2s;
+    }
+    .footer-col a:hover { color: var(--text); }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { font-size: 0.75rem; color: var(--muted); }
+
+    .live-dot {
+      display: inline-block; width: 7px; height: 7px;
+      background: var(--accent); border-radius: 50%;
+      margin-right: 6px;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .article-card.featured { grid-row: span 1; }
+      .hero-stats { position: static; flex-direction: row; margin-top: 2rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      nav .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .hero { min-height: 80vh; padding-bottom: 4vh; }
+      .newsletter { padding: 3rem 1.5rem; margin: 0 1rem 3rem; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-form input { border-right: 1px solid var(--border); }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .trends-table th:nth-child(3),
+      .trends-table td:nth-child(3),
+      .trends-table th:nth-child(5),
+      .trends-table td:nth-child(5) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="bolt">⚡</span>Power<span>Pulse</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#sectors">Sectors</a></li>
+    <li><a href="#featured">Latest</a></li>
+    <li><a href="#trends">Trends</a></li>
+    <li><a href="#newsletter" class="nav-cta">Subscribe</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-eyebrow">
+    <span class="live-dot"></span> Live Intelligence Feed · Power & Renewables
+  </div>
+
+  <h1>
+    THE <span class="hl">ENERGY</span><br>
+    <span class="hl2">REVOLUTION</span><br>
+    IS NOW
+  </h1>
+
+  <p class="hero-sub">
+    Tracking the latest breakthroughs, policy shifts, and market trends across solar, wind, hydrogen, battery storage, smart grids, and next-gen nuclear.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#featured" class="btn btn-primary">Explore Latest →</a>
+    <a href="#trends" class="btn btn-ghost">View Trends</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">30%</div>
+      <div class="stat-label">Global renewable share 2024</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$1.7T</div>
+      <div class="stat-label">Clean energy investment 2023</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">250GW</div>
+      <div class="stat-label">New solar added globally 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <span>Solar PV capacity crosses 1.5 TW globally</span>
+    <span>India's green hydrogen mission targets 5 MT by 2030</span>
+    <span>Offshore wind capacity to triple by 2030</span>
+    <span>EV adoption accelerates battery storage demand</span>
+    <span>Perovskite solar cells hit 28% efficiency milestone</span>
+    <span>AI-driven smart grid reduces transmission losses by 18%</span>
+    <span>Small Modular Reactors receive regulatory green light</span>
+    <span>BESS costs drop below $100/kWh threshold</span>
+    <!-- duplicate for seamless loop -->
+    <span>Solar PV capacity crosses 1.5 TW globally</span>
+    <span>India's green hydrogen mission targets 5 MT by 2030</span>
+    <span>Offshore wind capacity to triple by 2030</span>
+    <span>EV adoption accelerates battery storage demand</span>
+    <span>Perovskite solar cells hit 28% efficiency milestone</span>
+    <span>AI-driven smart grid reduces transmission losses by 18%</span>
+    <span>Small Modular Reactors receive regulatory green light</span>
+    <span>BESS costs drop below $100/kWh threshold</span>
+  </div>
+</div>
+
+<!-- ─── SECTORS ─── -->
+<section class="sectors-bg" id="sectors">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">Explore by Sector</div>
+      <div class="section-title">Key Technology Domains</div>
+    </div>
+    <a href="#" class="see-all">All sectors →</a>
+  </div>
+  <div class="sectors-grid">
+    <div class="sector-card fade-in">
+      <div class="sector-icon">☀️</div>
+      <div class="sector-name">Solar Energy</div>
+      <div class="sector-count">42 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:92%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">🌬️</div>
+      <div class="sector-name">Wind Power</div>
+      <div class="sector-count">31 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:75%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">🔋</div>
+      <div class="sector-name">Energy Storage</div>
+      <div class="sector-count">28 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:68%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">⚡</div>
+      <div class="sector-name">Smart Grids</div>
+      <div class="sector-count">24 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:58%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">💧</div>
+      <div class="sector-name">Green Hydrogen</div>
+      <div class="sector-count">19 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:46%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">⚛️</div>
+      <div class="sector-name">Nuclear / SMR</div>
+      <div class="sector-count">15 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:36%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">🌊</div>
+      <div class="sector-name">Hydro & Marine</div>
+      <div class="sector-count">12 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:29%"></div></div>
+    </div>
+    <div class="sector-card fade-in">
+      <div class="sector-icon">🤖</div>
+      <div class="sector-name">AI & Analytics</div>
+      <div class="sector-count">35 updates</div>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:84%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURED ARTICLES ─── -->
+<section id="featured" style="padding-top:0;">
+  <div class="section-header fade-in" style="padding-top:4rem;">
+    <div>
+      <div class="section-label">What's Happening Now</div>
+      <div class="section-title">Latest Technology Updates</div>
+    </div>
+    <a href="#" class="see-all">Full archive →</a>
+  </div>
+
+  <div class="featured-grid fade-in">
+
+    <!-- FEATURED -->
+    <div class="article-card featured">
+      <div class="img-placeholder img-solar" style="aspect-ratio:4/3; font-size:6rem; display:flex; align-items:center; justify-content:center;">☀️</div>
+      <div class="article-body">
+        <div class="article-tag">Solar</div>
+        <h2 class="article-title">Perovskite-Silicon Tandem Cells Shatter Efficiency Records — Commercial Rollout by 2026</h2>
+        <p class="article-excerpt">
+          A consortium of European and Asian manufacturers has demonstrated a 32.5% power conversion efficiency in perovskite-silicon tandem solar cells, opening the door to modules that squeeze far more energy from the same rooftop area. Mass production timelines are now being moved up.
+        </p>
+        <div class="article-meta">
+          <span>May 2025</span>
+          <span>·</span>
+          <span>5 min read</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDE CARDS -->
+    <div class="article-card">
+      <div class="img-placeholder img-wind" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:3rem;">🌬️</div>
+      <div class="article-body">
+        <div class="article-tag wind">Offshore Wind</div>
+        <h3 class="article-title">15 MW Turbines Now Standard as Offshore Wind Enters Its Gigawatt Era</h3>
+        <p class="article-excerpt">Turbine sizes are growing faster than the grid can absorb, forcing new approaches to cable design and grid interconnection.</p>
+        <div class="article-meta"><span>May 2025</span><span>·</span><span>4 min read</span></div>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="img-placeholder img-batt" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:3rem;">🔋</div>
+      <div class="article-body">
+        <div class="article-tag batt">Storage</div>
+        <h3 class="article-title">Sodium-Ion Batteries Hit Cost Parity with LFP — A New Era for Grid Storage</h3>
+        <p class="article-excerpt">CATL and BYD both announced sodium-ion lines priced below $80/kWh, removing the last barrier to utility-scale deployment.</p>
+        <div class="article-meta"><span>Apr 2025</span><span>·</span><span>3 min read</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 -->
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:1px; margin-top:1px;">
+
+    <div class="article-card fade-in">
+      <div class="img-placeholder img-h2" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:3rem;">💧</div>
+      <div class="article-body">
+        <div class="article-tag h2">Hydrogen</div>
+        <h3 class="article-title">India's National Green Hydrogen Mission: Where It Stands and What Comes Next</h3>
+        <div class="article-meta"><span>Apr 2025</span><span>·</span><span>6 min read</span></div>
+      </div>
+    </div>
+
+    <div class="article-card fade-in">
+      <div class="img-placeholder img-grid" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:3rem;">⚡</div>
+      <div class="article-body">
+        <div class="article-tag grid">Smart Grid</div>
+        <h3 class="article-title">AI-Powered Demand Forecasting Cuts Grid Curtailment of Renewables by 22%</h3>
+        <div class="article-meta"><span>Apr 2025</span><span>·</span><span>4 min read</span></div>
+      </div>
+    </div>
+
+    <div class="article-card fade-in">
+      <div class="img-placeholder img-nuke" style="aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:3rem;">⚛️</div>
+      <div class="article-body">
+        <div class="article-tag nuke">Nuclear</div>
+        <h3 class="article-title">Small Modular Reactors: The Technology Explained, and Why Big Power Players Are Betting Big</h3>
+        <div class="article-meta"><span>Mar 2025</span><span>·</span><span>8 min read</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── TRENDS TABLE ─── -->
+<section class="trends-section" id="trends">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">Market Intelligence</div>
+      <div class="section-title">Top Trending Technologies</div>
+    </div>
+  </div>
+
+  <div class="fade-in" style="overflow-x:auto;">
+    <table class="trends-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Technology / Trend</th>
+          <th>Status</th>
+          <th>Momentum</th>
+          <th>Region Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="trend-rank">01</td>
+          <td>
+            <div class="trend-name">Perovskite Solar Cells</div>
+            <div class="trend-desc">Next-gen PV with 30%+ efficiency potential</div>
+          </td>
+          <td><span class="badge badge-hot">🔥 Hot</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:96%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">Global</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">02</td>
+          <td>
+            <div class="trend-name">Grid-Scale Battery Storage (BESS)</div>
+            <div class="trend-desc">LFP and sodium-ion driving utility deployments</div>
+          </td>
+          <td><span class="badge badge-up">↑ Rising</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:90%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">USA, India, EU</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">03</td>
+          <td>
+            <div class="trend-name">Green Hydrogen Production</div>
+            <div class="trend-desc">Electrolysis-based H₂ for industry decarbonization</div>
+          </td>
+          <td><span class="badge badge-up">↑ Rising</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:82%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">India, EU, ME</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">04</td>
+          <td>
+            <div class="trend-name">AI-Driven Grid Management</div>
+            <div class="trend-desc">Machine learning for load forecasting and DERMS</div>
+          </td>
+          <td><span class="badge badge-new">★ New</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:78%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">Global</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">05</td>
+          <td>
+            <div class="trend-name">Offshore Floating Wind</div>
+            <div class="trend-desc">Deep-water turbines unlocking vast ocean resources</div>
+          </td>
+          <td><span class="badge badge-watch">◎ Watch</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:71%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">Norway, UK, Japan</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">06</td>
+          <td>
+            <div class="trend-name">Small Modular Reactors (SMR)</div>
+            <div class="trend-desc">Factory-built nuclear for baseload reliability</div>
+          </td>
+          <td><span class="badge badge-watch">◎ Watch</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:62%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">USA, Canada, UK</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">07</td>
+          <td>
+            <div class="trend-name">Vehicle-to-Grid (V2G)</div>
+            <div class="trend-desc">EVs as distributed storage assets for the grid</div>
+          </td>
+          <td><span class="badge badge-new">★ New</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:55%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">Europe, China</span></td>
+        </tr>
+        <tr>
+          <td class="trend-rank">08</td>
+          <td>
+            <div class="trend-name">Agrivoltaics</div>
+            <div class="trend-desc">Dual-use solar panels over farmland</div>
+          </td>
+          <td><span class="badge badge-up">↑ Rising</span></td>
+          <td><div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:48%"></div></div></td>
+          <td><span style="color:var(--muted);font-size:.8rem">India, Germany</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── NEWSLETTER ─── -->
+<div class="newsletter fade-in" id="newsletter">
+  <div class="section-label" style="margin-bottom:1rem;">Stay Ahead of the Curve</div>
+  <h2>Get the <span class="hl">Energy</span> Brief</h2>
+  <p>Weekly digest of the biggest developments in renewable energy and power sector technology, delivered to your inbox.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="your@email.com" />
+    <button type="button">Subscribe →</button>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size:1.5rem;">⚡Power<span style="color:var(--text)">Pulse</span></div>
+      <p>Independent coverage of the global energy transition — solar, wind, storage, hydrogen, and the grid of the future.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Sectors</h4>
+      <ul>
+        <li><a href="#">Solar Energy</a></li>
+        <li><a href="#">Wind Power</a></li>
+        <li><a href="#">Energy Storage</a></li>
+        <li><a href="#">Smart Grids</a></li>
+        <li><a href="#">Green Hydrogen</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Market Data</a></li>
+        <li><a href="#">Policy Updates</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Glossary</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Advertise</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 PowerPulse. Tracking the energy revolution.</p>
+    <p><span class="live-dot"></span>Updated regularly with the latest industry intelligence.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Animate trend bars on scroll
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.trend-bar-fill').forEach(bar => {
+          bar.style.width = bar.getAttribute('data-width') || bar.style.width;
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.trends-table').forEach(t => barObserver.observe(t));
+
+  // Newsletter subscribe
+  document.querySelector('.newsletter-form button').addEventListener('click', function() {
+    const input = document.querySelector('.newsletter-form input');
+    if (input.value.includes('@')) {
+      this.textContent = '✓ Subscribed!';
+      this.style.background = 'var(--accent)';
+      input.value = '';
+      setTimeout(() => { this.textContent = 'Subscribe →'; }, 3000);
+    } else {
+      input.style.borderColor = 'var(--danger)';
+      setTimeout(() => { input.style.borderColor = 'var(--border)'; }, 2000);
+    }
+  });
+</script>
+
+</body>
+</html>
